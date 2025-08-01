@@ -1,0 +1,8 @@
+Flask
+pandas
+selenium
+webdriver-manager
+beautifulsoup4
+scikit-learn
+joblib
+numpy

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>家賃予測 - 情報入力</title>
+    <style>
+
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        .container { max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        label { font-weight: bold; display: block; margin-top: 15px; text-align: left; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin-top: 20px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px; background-color: #28a745; color: white; cursor: pointer; }
+        .flash { padding: 1em; margin-bottom: 1em; border: 1px solid; border-radius: 4px; color: #fff; background-color: #5bc0de;}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>「{{ region_name }}」の家賃を予測</h1>
+
+        <form method="post" action="/predict">
+            <input type="hidden" name="region_name" value="{{ region_name }}">
+            <input type="hidden" name="safe_region_name" value="{{ safe_region_name }}">
+
+            <label for="minute">最寄り駅までの時間（分）:</label>
+            <input type="number" step="1" name="minute" id="minute" required>
+
+            <label for="year">築年数（年）:</label>
+            <input type="number" step="1" name="year" id="year" required>
+
+            <label for="menseki">専有面積（㎡）:</label>
+            <input type="number" step="0.1" name="menseki" id="menseki" required>
+
+            <label for="madori">間取り:</label>
+            <select name="madori" id="madori" required>
+                {% for m in madori_list %}
+                <option value="{{ m }}">{{ m }}</option>
+                {% endfor %}
+            </select>
+            
+            <button type="submit">予測する</button>
+        </form>
+    </div>
+</body>
+</html>

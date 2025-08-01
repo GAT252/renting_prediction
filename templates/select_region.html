@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家賃予測 - 地域選択</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        h1 { color: #333; }
+        .container { max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input[type="text"] { width: 100%; padding: 12px; margin-top: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px; background-color: #007bff; color: white; cursor: pointer; }
+        .flash { padding: 1em; margin: 1em 0; border: 1px solid; border-radius: 4px; color: #fff; }
+        .flash.error { background-color: #d9534f; }
+        .flash.info { background-color: #5bc0de; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>家賃予測AI</h1>
+        <p>予測したい地域名を入力してください。<br>（例：勝どき, 新宿駅, 世田谷区）</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash {{ category if category else 'info' }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form action="/train" method="post">
+            <input type="text" name="region_name" placeholder="地域名を入力" required>
+            <button type="submit">この地域で予測する</button>
+        </form>
+    </div>
+</body>
+</html>
