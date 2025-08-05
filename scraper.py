@@ -19,10 +19,6 @@ if not os.path.exists('models'):
     os.makedirs('models')
 
 def scrape_and_train(region_name):
-    """
-    指定された地域名でSUUMOから物件情報を複数ページにわたりスクレイピングし、
-    家賃予測モデルを学習・保存する。（元の取得ロジックを維持）
-    """
     print(f"Scraping and training for region: {region_name}...")
     
     options = webdriver.ChromeOptions()
@@ -55,7 +51,7 @@ def scrape_and_train(region_name):
                 EC.presence_of_element_located((By.CLASS_NAME, "infodatabox-details-txt"))
             )
             
-            # 1. 基本情報の取得
+            # 賃料、共益費、礼金、専有面積、間取りの取得
             el = driver.find_elements(By.CLASS_NAME, "infodatabox-details-txt")
             texts = [e.text for e in el]
             if not texts:
@@ -64,7 +60,7 @@ def scrape_and_train(region_name):
             rows = [texts[i:i+5] for i in range(0, len(texts), 5)]
             df_base = pd.DataFrame(rows, columns=["賃料", "共益費", "礼金", "専有面積", "間取り"])
 
-            # 2. 築年数と徒歩の取得
+            # 築年数と徒歩の取得
             results_year = []
             results_walk = []
             
@@ -92,7 +88,7 @@ def scrape_and_train(region_name):
             s1 = pd.Series(results_year, name="築年数")
             s2 = pd.Series(results_walk, name="徒歩")
             
-            # 3. ページ内のデータを結合し、リストに追加
+            # ページ内のデータを結合し、リストに追加
             df_page = pd.concat([df_base, s1, s2], axis=1)
             all_dfs.append(df_page)
 
@@ -116,7 +112,7 @@ def scrape_and_train(region_name):
     # 全ページのDataFrameを一つに結合
     df = pd.concat(all_dfs, ignore_index=True)
 
-    # --- データ前処理  ---
+    #データ前処理 
     print("Data processing...")
     
     # 取得に失敗した行や、不要な列を削除
@@ -136,7 +132,7 @@ def scrape_and_train(region_name):
 
     print(f"Data processing finished. Total {len(df)} properties found.")
 
-    # --- モデル学習処理  ---
+    # モデルの学習
     print("\nStarting model training...")
 
     X = df.drop('賃料', axis=1)

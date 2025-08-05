@@ -40,7 +40,6 @@ def train_page():
         
             madori_list_path = f'models/{safe_region_name}_madori_list.json'
             
-            print("--- DEBUG ---")
             print(f"Attempting to load madori list from: {madori_list_path}")
 
             if os.path.exists(madori_list_path):
@@ -52,7 +51,6 @@ def train_page():
                 
                 print(f"ERROR: Madori list file not found at {madori_list_path}")
             
-            print("--- END DEBUG ---")
         
 
         # 最終的にリストが空だった場合に警告を出す
@@ -64,10 +62,7 @@ def train_page():
                                safe_region_name=safe_region_name,
                                madori_list=madori_list)
     except Exception as e:
-        print("="*20, "ERROR", "="*20)
-        print(f"An exception occurred: {e}")
         traceback.print_exc() # トレースバックを出力
-        print("="*55)
         flash(f'エラーが発生しました: {e}')
         return redirect(url_for('select_page'))
 
@@ -85,7 +80,7 @@ def predict_page():
         model = joblib.load(f'models/{safe_region_name}_model.pkl')
         with open(f'models/{safe_region_name}_columns.json', 'r', encoding='utf-8') as f:
             columns = json.load(f)
-        
+        #予測データフレームの作成
         pred_df = pd.DataFrame(columns=columns)
         pred_df.loc[0, :] = 0
         
@@ -103,16 +98,7 @@ def predict_page():
         return render_template('result.html', fee=fee, region_name=region_name)
 
     except (ValueError, FileNotFoundError) as e:
-        print("="*20, "ERROR in /predict", "="*20)
-        print("Form Data:")
-        for key, value in request.form.items():
-            print(f"  {key}: {value}")
-        print("-" * 20)
-        print(f"Exception Type: {type(e).__name__}")
-        print(f"Exception Message: {e}")
-        print("Traceback:")
         traceback.print_exc() # トレースバックをコンソールに出力
-        print("="*57)
         flash(f'予測中にエラーが発生しました: {e}')
         return redirect(url_for('select_page'))
 
