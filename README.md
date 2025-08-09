@@ -67,14 +67,6 @@ pip install -r requirements.txt
 7.  **予測結果の確認**:
     * 入力した情報に基づいて計算された予測家賃が、結果ページに表示されます。
 ![システム構成図](images/prediction.png)
-## ファイルとフォルダの説明
+## ディレクトリ構造
 
-* app.py                  # Flaskアプリケーションのメインファイル
-* scraper.py              # SUUMOからデータを収集し、モデルを学習・保存するスクリプト
-* requirements.txt        # 必要なPythonライブラリの一覧
-* .gitignore              # Gitの追跡から除外するファイル（モデルやキャッシュ）
-* models/                 # 学習済みモデルやカラム情報が保存されるディレクトリ
-* templates/              # HTMLテンプレート
-* select_region.html  # 地域名を入力する最初のページ
-* index.html          # 予測情報を入力するページ
-* result.html         # 予測結果を表示するページ
+![システム構成図](images/directory.png)
